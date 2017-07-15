@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace Ojhaujjwal\Session;
 
 use ParagonIE\Cookie\Cookie;
@@ -10,7 +11,7 @@ use PSR7SessionEncodeDecode\Encoder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Zend\Math\Rand;
 
-final class SessionManager
+final class SessionManager implements SessionManagerInterface
 {
     /**
      * @var OptionsResolver
@@ -94,8 +95,15 @@ final class SessionManager
         $this->options['cookie'] = self::$cookieOptionsResolver->resolve($this->options['cookie']);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function start(): void
     {
+        if ($this->isStarted()) {
+            return;
+        }
+
         $name = $this->getName();
         $this->sessionId = $this->request->getCookieParams()[$name] ?? $this->generateId();
         $this->attributes = $this->readFromHandler();
@@ -128,7 +136,7 @@ final class SessionManager
      *
      * @return void
      */
-    public function save(): void
+    private function save(): void
     {
         $this->handler->write($this->getId(), $this->prepareForStorage(
             $this->sessionEncode($this->attributes)
@@ -176,6 +184,9 @@ final class SessionManager
         return $data;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getId(): string
     {
         return $this->sessionId;
@@ -187,44 +198,47 @@ final class SessionManager
     }
 
     /**
-     * Get all of the session data.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function all(): array
     {
         return $this->attributes;
     }
 
-    public function has($key): bool
+    /**
+     * {@inheritdoc}
+     */
+    public function has(string $key): bool
     {
         return isset($this->attributes[$key]);
     }
 
-    public function get($key, $default = null): mixed
+    /**
+     * {@inheritdoc}
+     */
+    public function get(string $key, $default = null): mixed
     {
         return $this->attributes[$key] ?? $default;
     }
 
-    public function set($key, $value): void
+    /**
+     * {@inheritdoc}
+     */
+    public function put(string $key, $value): void
     {
         $this->attributes[$key] = $value;
     }
 
     /**
-     * Remove an item from the session, returning its value.
-     *
-     * @param  string  $key
+     * {@inheritdoc}
      */
-    public function remove($key): void
+    public function remove(string $key): void
     {
         unset($this->attributes[$key]);
     }
 
     /**
-     * Remove all of the items from the session.
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function flush(): void
     {
@@ -232,24 +246,9 @@ final class SessionManager
     }
 
     /**
-     * Flush the session data and regenerate the ID.
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    public function invalidate(): void
-    {
-        $this->flush();
-        $this->migrate(true);
-    }
-
-
-    /**
-     * Generate a new session ID for the session.
-     *
-     * @param  bool  $destroy
-     * @return void
-     */
-    public function migrate($destroy = false): void
+    public function regenerate($destroy = false): void
     {
         if ($destroy) {
             $this->handler->destroy($this->getId());
@@ -258,27 +257,14 @@ final class SessionManager
     }
 
     /**
-     * Generate a new session identifier.
-     *
-     * @param  bool  $destroy
-     * @return void
-     */
-    public function regenerate($destroy = false): void
-    {
-        $this->migrate($destroy);
-    }
-
-    /**
-     * Determine if the session has been started.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isStarted(): bool
     {
         return $this->started;
     }
 
-    public function buildCookie(): string
+    private function buildCookie(): string
     {
         $cookie = new Cookie($this->getName(), $this->options['cookie']['domain']);
         $cookie->setValue($this->sessionId);
@@ -290,6 +276,9 @@ final class SessionManager
         return substr((string) $cookie, strlen('Set-Cookie: '));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function write(ResponseInterface $response): ResponseInterface
     {
         $this->save();
