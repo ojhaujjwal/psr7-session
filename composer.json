@@ -1,0 +1,31 @@
+{
+  "name": "ujjwal/psr-7-http-session",
+  "description": "Alternative to PHP's native session handler.",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ujjwal Ojha",
+      "email": "bring2uo@gmail.com"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/psr7-sessions/session-encode-decode"
+    }
+  ],
+  "require": {
+    "paragonie/cookie": "dev-master#aae061170f7093e2cdc9dab5949fd1aab5bec2a7",
+    "symfony/options-resolver": "^3.3",
+    "zendframework/zend-math": "^3.0",
+    "psr/http-message": "^1.0",
+    "psr7-sessions/session-encode-decoder": "dev-master",
+    "roave/security-advisories": "dev-master"
+  },
+  "require-dev": {
+    "http-interop/http-middleware": "^0.4.1",
+    "zendframework/zend-stratigility": "^2.0"
+  }
+}
