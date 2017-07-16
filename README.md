@@ -169,6 +169,21 @@ $storage->remove('abcd');
 ```php
 $storage->flush();
 ```
+
+### Session Middleware
+It also comes with a http middleware which you can use to automatically initialize session and write cookie to response.
+The middleware is compatible with `http-interop/http-middleware` based single pass approach or express-like double pass approach.  
+
+```php
+ $middleware = new Ojhaujjwal\Session\SessionMiddleware($handler, $sessionOptions);
+ $middleware->process($request, $delegate);
+ // or
+ $middleware($request, $response, $next);
+ 
+ //using with zend-expressive
+ //after errorhandler and before the routing middleware
+ $app->pipe(\Ojhaujjwal\Session\SessionMiddleware::class);
+```
  
 ### TODO 
 - [ ] Unit tests
