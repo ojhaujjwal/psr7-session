@@ -206,10 +206,10 @@ final class SessionManager implements SessionManagerInterface
      */
     private function generateId(): string
     {
-        return session_create_id();
-
-        //this doesnot generate a suitable name
-        return Rand::getString($this->options['sid_length']);
+        return Rand::getString(
+            $this->options['sid_length'],
+            '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        );
     }
 
     /**
