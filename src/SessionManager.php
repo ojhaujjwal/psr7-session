@@ -53,7 +53,7 @@ final class SessionManager implements SessionManagerInterface
     /**
      * @var bool
      */
-    private $started;
+    private $started = false;
 
     /**
      * @var StorageInterface
@@ -80,14 +80,14 @@ final class SessionManager implements SessionManagerInterface
 
         if (null === self::$cookieOptionsResolver) {
             $resolver = new OptionsResolver();
-            $resolver->setDefaults(['cookie' => [
+            $resolver->setDefaults([
                 'domain' => $this->request->getHeaderLine('Host'),
                 'path' => '/',
                 'http_only' => true,
                 'secure_only' => $this->request->getUri()->getScheme() === 'https',
                 'lifetime' => 0,
                 'same_site' => Cookie::SAME_SITE_RESTRICTION_LAX,
-            ]]);
+            ]);
 
             self::$cookieOptionsResolver = $resolver;
         }
@@ -199,8 +199,16 @@ final class SessionManager implements SessionManagerInterface
         return $this->sessionId;
     }
 
+    /**
+     * TODO: generate session id according to the specified length
+     *
+     * @return string
+     */
     private function generateId(): string
     {
+        return session_create_id();
+
+        //this doesnot generate a suitable name
         return Rand::getString($this->options['sid_length']);
     }
 
@@ -230,7 +238,9 @@ final class SessionManager implements SessionManagerInterface
         $cookie->setPath($this->options['cookie']['path']);
         $cookie->setHttpOnly($this->options['cookie']['http_only']);
         $cookie->setSecureOnly($this->options['cookie']['secure_only']);
-        $cookie->setMaxAge($this->options['cookie']['lifetime']);
+        if ($this->options['cookie']['lifetime']) {
+            $cookie->setMaxAge($this->options['cookie']['lifetime']);
+        }
         $cookie->setSameSiteRestriction($this->options['cookie']['same_site']);
         return substr((string) $cookie, strlen('Set-Cookie: '));
     }

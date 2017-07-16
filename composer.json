@@ -27,5 +27,10 @@
   "require-dev": {
     "http-interop/http-middleware": "^0.4.1",
     "zendframework/zend-stratigility": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Ojhaujjwal\\Session\\": "src/"
+    }
   }
 }

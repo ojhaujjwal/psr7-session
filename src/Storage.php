@@ -40,7 +40,7 @@ final class Storage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    public function get(string $key, $default = null): mixed
+    public function get(string $key, $default = null)
     {
         return $this->attributes[$key] ?? $default;
     }
