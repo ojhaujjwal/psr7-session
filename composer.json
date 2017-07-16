@@ -1,5 +1,5 @@
 {
-  "name": "ujjwal/psr-7-http-session",
+  "name": "ujjwal/psr7-http-session",
   "description": "Alternative to PHP's native session handler.",
   "minimum-stability": "dev",
   "prefer-stable": true,

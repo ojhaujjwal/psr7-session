@@ -37,7 +37,7 @@ interface SessionManagerInterface
      * @param  bool  $destroy
      * @return void
      */
-    public function regenerate($destroy = false): void;
+    public function regenerate($destroy = true): void;
 
     /**
      * Gets the session id

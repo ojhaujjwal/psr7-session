@@ -200,7 +200,6 @@ final class SessionManager implements SessionManagerInterface
     }
 
     /**
-     * TODO: generate session id according to the specified length
      *
      * @return string
      */
@@ -215,7 +214,7 @@ final class SessionManager implements SessionManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function regenerate($destroy = false): void
+    public function regenerate($destroy = true): void
     {
         if ($destroy) {
             $this->handler->destroy($this->getId());
