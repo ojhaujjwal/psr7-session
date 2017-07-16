@@ -24,12 +24,12 @@ interface SessionManagerInterface
     public function isStarted(): bool;
 
     /**
-     * Write the session to cookie
+     * Closses the session and writes the session to cookie header
      *
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function write(ResponseInterface $response): ResponseInterface;
+    public function close(ResponseInterface $response): ResponseInterface;
 
     /**
      * Generate a new session identifier for the session.
@@ -47,50 +47,9 @@ interface SessionManagerInterface
     public function getId(): string;
 
     /**
-     * Get all of the session data.
+     * Gets the associated session storage
      *
-     * @return array
+     * @return StorageInterface
      */
-    public function all(): array;
-
-    /**
-     * Check if key exists
-     *
-     * @param string $key
-     * @return bool
-     */
-    public function has(string $key): bool;
-
-    /**
-     * Check if key exists
-     *
-     * @param string $key
-     * @param mixed $default
-     * @return mixed
-     */
-    public function get(string $key, $default = null): mixed;
-
-    /**
-     * Put a key / value pair or array of key / value pairs in the session.
-     *
-     * @param string $key
-     * @param mixed  $value
-     * @return void
-     */
-    public function put(string $key, $value): void;
-
-    /**
-     * Remove an item from the session.
-     *
-     * @param string $key
-     * @return void
-     */
-    public function remove(string $key): void;
-
-    /**
-     * Remove all of the items from the session.
-     *
-     * @return void
-     */
-    public function flush(): void;
+    public function getStorage(): StorageInterface;
 }

@@ -51,19 +51,20 @@ final class SessionManager implements SessionManagerInterface
     private $sessionId;
 
     /**
-     * @var array
-     */
-    private $attributes;
-
-    /**
      * @var bool
      */
     private $started;
 
+    /**
+     * @var StorageInterface
+     */
+    private $storage;
+
     public function __construct(
         SessionHandlerInterface $handler,
         ServerRequestInterface $request,
-        array $options
+        array $options,
+        StorageInterface $storage = null
     )
     {
         $this->handler = $handler;
@@ -93,6 +94,12 @@ final class SessionManager implements SessionManagerInterface
 
         $this->options = self::$optionsResolver->resolve($options);
         $this->options['cookie'] = self::$cookieOptionsResolver->resolve($this->options['cookie']);
+
+        if (null === $storage) {
+            $storage = new Storage();
+        }
+
+        $this->storage = $storage;
     }
 
     /**
@@ -106,7 +113,7 @@ final class SessionManager implements SessionManagerInterface
 
         $name = $this->getName();
         $this->sessionId = $this->request->getCookieParams()[$name] ?? $this->generateId();
-        $this->attributes = $this->readFromHandler();
+        $this->storage->fromArray($this->readFromHandler());
         $this->started = true;
     }
 
@@ -139,7 +146,7 @@ final class SessionManager implements SessionManagerInterface
     private function save(): void
     {
         $this->handler->write($this->getId(), $this->prepareForStorage(
-            $this->sessionEncode($this->attributes)
+            $this->sessionEncode($this->storage->toArray())
         ));
         $this->started = false;
     }
@@ -200,54 +207,6 @@ final class SessionManager implements SessionManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function all(): array
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function has(string $key): bool
-    {
-        return isset($this->attributes[$key]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get(string $key, $default = null): mixed
-    {
-        return $this->attributes[$key] ?? $default;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function put(string $key, $value): void
-    {
-        $this->attributes[$key] = $value;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function remove(string $key): void
-    {
-        unset($this->attributes[$key]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function flush(): void
-    {
-        $this->attributes = [];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function regenerate($destroy = false): void
     {
         if ($destroy) {
@@ -279,7 +238,7 @@ final class SessionManager implements SessionManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function write(ResponseInterface $response): ResponseInterface
+    public function close(ResponseInterface $response): ResponseInterface
     {
         if (!$this->isStarted()) {
             return $response;
@@ -290,6 +249,14 @@ final class SessionManager implements SessionManagerInterface
             'Set-Cookie',
             $this->buildCookie()
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStorage(): StorageInterface
+    {
+        return $this->storage;
     }
 
     private function getName(): string
