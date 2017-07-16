@@ -128,7 +128,7 @@ final class SessionManager implements SessionManagerInterface
 
         $sessionDecoder = self::$sessionDecoder;
 
-        return self::$sessionDecoder($decoded);
+        return $sessionDecoder($decoded);
     }
 
     /**
@@ -281,6 +281,10 @@ final class SessionManager implements SessionManagerInterface
      */
     public function write(ResponseInterface $response): ResponseInterface
     {
+        if (!$this->isStarted()) {
+            return $response;
+        }
+
         $this->save();
         return $response->withHeader(
             'Set-Cookie',

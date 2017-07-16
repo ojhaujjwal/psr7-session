@@ -6,11 +6,45 @@ namespace Ojhaujjwal\Session;
 final class FileSessionHandler implements SessionHandlerInterface
 {
     /**
+     * @var string
+     */
+    private $path;
+
+    /**
+     * TODO: throw proper exceptions
+     *
+     * FileSessionHandler constructor.
+     * @param string $path
+     * @throws \Exception
+     */
+    public function __construct(string $path)
+    {
+        if (!is_dir($path)) {
+            throw new \Exception('Not a directory');
+        }
+
+        if (!is_writable($path)) {
+            throw new \Exception('Directory not writable');
+        }
+
+        $this->path = $path;
+    }
+
+    /**
+     * @param string $sessionId
+     * @return string
+     */
+    private function fp(string $sessionId): string
+    {
+        return $this->path . '/' . $sessionId;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function read(string $sessionId)
     {
-        //TODO: implement
+        return file_exists($this->fp($sessionId)) ? file_get_contents($this->fp($sessionId)): '';
     }
 
     /**
@@ -18,7 +52,7 @@ final class FileSessionHandler implements SessionHandlerInterface
      */
     public function write(string $sessionId, string $sessionData): void
     {
-        //TODO: implement
+        file_put_contents($this->fp($sessionId), $sessionData);
     }
 
     /**
@@ -26,6 +60,8 @@ final class FileSessionHandler implements SessionHandlerInterface
      */
     public function destroy($sessionId): void
     {
-        //TODO: implement
+        if (file_exists($this->fp($sessionId))) {
+            unlink($this->fp($sessionId));
+        }
     }
 }

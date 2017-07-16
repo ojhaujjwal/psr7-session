@@ -5,6 +5,9 @@ namespace Ojhaujjwal\Session;
 
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * TODO: session garbage collection
+ */
 interface SessionManagerInterface
 {
     /**
@@ -21,6 +24,8 @@ interface SessionManagerInterface
     public function isStarted(): bool;
 
     /**
+     * Write the session to cookie
+     *
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
