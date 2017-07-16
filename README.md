@@ -92,9 +92,9 @@ Type: string
 Default: `Lax`
 Specifies `SameSite` cookie attribute. Very useful to mitigate CSRF by preventing the browser from sending this cookie along with cross-site requests.
 Allowed values:
-    * empty string
-    * `ParagonIE\Cookie\Cookie::SAME_SITE_RESTRICTION_LAX`
-    * `ParagonIE\Cookie\Cookie::SAME_SITE_RESTRICTION_STRICT` 
+* empty string for not setting the attribute
+* `ParagonIE\Cookie\Cookie::SAME_SITE_RESTRICTION_LAX`(fairly strict)
+* `ParagonIE\Cookie\Cookie::SAME_SITE_RESTRICTION_STRICT`(very strict) 
 
 ### Basic operations
 #### Initializing SessionManager
