@@ -1,9 +1,17 @@
 {
   "name": "ujjwal/psr7-http-session",
-  "description": "Alternative to PHP's native session handler.",
+  "description": "Alternative to PHP's native session handler for PSR-7",
+  "type": "library",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "license": "MIT",
+  "keywords": [
+    "psr-7",
+    "psr7",
+    "session",
+    "http",
+    "http-session"
+  ],
   "authors": [
     {
       "name": "Ujjwal Ojha",
@@ -27,6 +35,10 @@
   "require-dev": {
     "http-interop/http-middleware": "^0.4.1",
     "zendframework/zend-stratigility": "^2.0"
+  },
+  "suggest": {
+    "http-interop/http-middleware": "To use interop based single pass session middleware for automatically starting session and writing to cookie",
+    "zendframework/zend-stratigility": "To use double pass session middleware for automatically starting session and writing to cookie"
   },
   "autoload": {
     "psr-4": {
