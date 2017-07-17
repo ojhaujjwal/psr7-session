@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f361236bd603c67299c42c3d43132399",
+    "content-hash": "577cc38b3bb0d0ed2ade61ecf05806ab",
     "packages": [
         {
             "name": "delight-im/http",
@@ -44,7 +44,7 @@
         },
         {
             "name": "paragonie/cookie",
-            "version": "dev-master",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/PHP-Cookie.git",
@@ -81,7 +81,7 @@
                 "samesite",
                 "xss"
             ],
-            "time": "2017-06-21 16:15:52"
+            "time": "2017-06-21T16:15:52+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -626,7 +626,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "paragonie/cookie": 20,
         "psr7-sessions/session-encode-decoder": 20,
         "roave/security-advisories": 20
     },
