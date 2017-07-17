@@ -19,10 +19,6 @@ final class FileSessionHandler implements SessionHandlerInterface
      */
     public function __construct(string $path)
     {
-        if (!is_dir($path)) {
-            throw new \Exception('Not a directory');
-        }
-
         if (!is_writable($path)) {
             throw new \Exception('Directory not writable');
         }
