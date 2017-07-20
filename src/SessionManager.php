@@ -8,11 +8,14 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use PSR7SessionEncodeDecode\Decoder;
 use PSR7SessionEncodeDecode\Encoder;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Zend\Math\Rand;
 
 final class SessionManager implements SessionManagerInterface
 {
+    const DEFAULT_SID_LENGTH = 40;
+
     /**
      * @var OptionsResolver
      */
@@ -23,15 +26,6 @@ final class SessionManager implements SessionManagerInterface
      */
     private static $cookieOptionsResolver;
 
-    /**
-     * @var Encoder
-     */
-    private static $sessionEncoder;
-
-    /**
-     * @var Decoder
-     */
-    private static $sessionDecoder;
     /**
      * @var SessionHandlerInterface
      */
@@ -69,11 +63,19 @@ final class SessionManager implements SessionManagerInterface
     {
         $this->handler = $handler;
         $this->request = $request;
+        $this->options = $this->resolveOptions($options);
+        $this->storage = $storage ?? new Storage();
+    }
 
+    private function resolveOptions(array $options): array
+    {
         if (null === self::$optionsResolver) {
             $resolver = new OptionsResolver();
-            $resolver->setDefaults(['cookie' => [], 'sid_length' => 40]);
+            $resolver->setDefaults(['cookie' => [], 'sid_length' => self::DEFAULT_SID_LENGTH]);
             $resolver->setRequired(['name']);
+            $resolver->setAllowedTypes('name', 'string');
+            $resolver->setAllowedTypes('sid_length',  'integer');
+            $resolver->setAllowedTypes('cookie', 'array');
 
             self::$optionsResolver = $resolver;
         }
@@ -81,25 +83,39 @@ final class SessionManager implements SessionManagerInterface
         if (null === self::$cookieOptionsResolver) {
             $resolver = new OptionsResolver();
             $resolver->setDefaults([
-                'domain' => $this->request->getHeaderLine('Host'),
                 'path' => '/',
                 'http_only' => true,
-                'secure_only' => $this->request->getUri()->getScheme() === 'https',
                 'lifetime' => 0,
                 'same_site' => Cookie::SAME_SITE_RESTRICTION_LAX,
             ]);
 
+            $resolver->setDefault('domain', function (Options $options) {
+                return $this->request->getHeaderLine('Host');
+            });
+
+            $resolver->setDefault('secure_only', function (Options $options) {
+                return $this->request->getUri()->getScheme() === 'https';
+            });
+
+            $resolver->setAllowedTypes('domain', 'string');
+            $resolver->setAllowedTypes('path', 'string');
+            $resolver->setAllowedTypes('http_only', 'boolean');
+            $resolver->setAllowedTypes('secure_only', 'boolean');
+            $resolver->setAllowedTypes('lifetime', 'integer');
+            $resolver->setAllowedTypes('same_site', 'string');
+            $resolver->setAllowedValues(
+                'same_site',
+                [Cookie::SAME_SITE_RESTRICTION_LAX, Cookie::SAME_SITE_RESTRICTION_STRICT, '']
+            );
+
+
             self::$cookieOptionsResolver = $resolver;
         }
 
-        $this->options = self::$optionsResolver->resolve($options);
-        $this->options['cookie'] = self::$cookieOptionsResolver->resolve($this->options['cookie']);
+        $options = self::$optionsResolver->resolve($options);
+        $options['cookie'] = self::$cookieOptionsResolver->resolve($options['cookie']);
 
-        if (null === $storage) {
-            $storage = new Storage();
-        }
-
-        $this->storage = $storage;
+        return $options;
     }
 
     /**
@@ -119,23 +135,12 @@ final class SessionManager implements SessionManagerInterface
 
     private function sessionEncode(array $attributes): string
     {
-        if (null === self::$sessionEncoder) {
-            self::$sessionEncoder = new Encoder();
-        }
-        $sessionEncoder = self::$sessionEncoder;
-
-        return $sessionEncoder($attributes);
+        return serialize($attributes);
     }
 
     private function sessionDecode(string $decoded): array
     {
-        if (null === self::$sessionDecoder) {
-            self::$sessionDecoder = new Decoder();
-        }
-
-        $sessionDecoder = self::$sessionDecoder;
-
-        return $sessionDecoder($decoded);
+        return unserialize($decoded, ['allowed_classes' => true]);
     }
 
     /**
@@ -216,6 +221,9 @@ final class SessionManager implements SessionManagerInterface
      */
     public function regenerate($destroy = true): void
     {
+        if (!$this->isStarted()) {
+            return;
+        }
         if ($destroy) {
             $this->handler->destroy($this->getId());
         }
