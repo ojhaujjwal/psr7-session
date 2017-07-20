@@ -188,4 +188,6 @@ The middleware is compatible with `http-interop/http-middleware` based single pa
 ### TODO 
 - [ ] Unit tests
 - [ ] Garbage collection
+- [ ] Cookie Based session handler
+- [ ] Encryption Session Handler
  
