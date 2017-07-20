@@ -11,16 +11,14 @@ final class FileSessionHandler implements SessionHandlerInterface
     private $path;
 
     /**
-     * TODO: throw proper exceptions
-     *
      * FileSessionHandler constructor.
      * @param string $path
-     * @throws \Exception
+     * @throws Exception\PathNotWritableException
      */
     public function __construct(string $path)
     {
         if (!is_writable($path)) {
-            throw new \Exception('Directory not writable');
+            throw new Exception\PathNotWritableException();
         }
 
         $this->path = $path;
