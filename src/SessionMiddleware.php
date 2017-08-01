@@ -5,6 +5,7 @@ namespace Ojhaujjwal\Session;
 
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Ojhaujjwal\Session\Handler\HandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Stratigility\Delegate\CallableDelegateDecorator;
@@ -22,10 +23,10 @@ final class SessionMiddleware implements MiddlewareInterface
 
     /**
      * SessionMiddleware constructor.
-     * @param SessionHandlerInterface $sessionHandler
+     * @param HandlerInterface $sessionHandler
      * @param array $options
      */
-    public function __construct(SessionHandlerInterface $sessionHandler, array $options)
+    public function __construct(HandlerInterface $sessionHandler, array $options)
     {
 
         $this->sessionHandler = $sessionHandler;

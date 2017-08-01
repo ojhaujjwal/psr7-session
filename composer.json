@@ -19,6 +19,7 @@
     }
   ],
   "require": {
+    "php": ">=7.1",
     "paragonie/cookie": "^3.2.0",
     "symfony/options-resolver": "^3.3",
     "zendframework/zend-math": "^3.0",

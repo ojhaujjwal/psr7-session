@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Ojhaujjwal\Session;
+namespace Ojhaujjwal\Session\Handler;
 
-interface SessionHandlerInterface
+interface HandlerInterface
 {
     /**
      * @param string $sessionId

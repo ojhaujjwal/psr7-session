@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Ojhaujjwal\SessionTest;
 
 use Mockery as m;
-use Ojhaujjwal\Session\SessionHandlerInterface;
+use Ojhaujjwal\Session\Handler\HandlerInterface;
 use Ojhaujjwal\Session\SessionManager;
 use Ojhaujjwal\Session\Storage;
 use Ojhaujjwal\Session\StorageInterface;
@@ -25,7 +25,7 @@ class SessionManagerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->handler = m::mock(SessionHandlerInterface::class);
+        $this->handler = m::mock(HandlerInterface::class);
         $this->request = m::mock(ServerRequestInterface::class);
         $this->storage = m::mock(StorageInterface::class);
         $this->manager = new SessionManager($this->handler, $this->request, [

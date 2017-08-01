@@ -14,7 +14,7 @@ Alternative to PHP's native session handler. It does not depend on PHP's session
         ]
     ];
 
-    $sessionHandler = new Ojhaujjwal\Session\FileSessionHandler('path/to/session-data');
+    $sessionHandler = new Ojhaujjwal\Session\Handler\FileHandler('path/to/session-data');
     $sessionManager = new Ojhaujjwal\Session\SessionManager(
         $sessionHandler,
         $request,

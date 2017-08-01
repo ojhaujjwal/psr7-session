@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 namespace Ojhaujjwal\Session;
 
+use Ojhaujjwal\Session\Handler\HandlerInterface;
 use ParagonIE\Cookie\Cookie;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use PSR7SessionEncodeDecode\Decoder;
-use PSR7SessionEncodeDecode\Encoder;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Zend\Math\Rand;
@@ -27,7 +26,7 @@ final class SessionManager implements SessionManagerInterface
     private static $cookieOptionsResolver;
 
     /**
-     * @var SessionHandlerInterface
+     * @var HandlerInterface
      */
     private $handler;
     /**
@@ -55,7 +54,7 @@ final class SessionManager implements SessionManagerInterface
     private $storage;
 
     public function __construct(
-        SessionHandlerInterface $handler,
+        HandlerInterface $handler,
         ServerRequestInterface $request,
         array $options,
         StorageInterface $storage = null

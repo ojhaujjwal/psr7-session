@@ -1,9 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Ojhaujjwal\Session;
+namespace Ojhaujjwal\Session\Handler;
 
-final class FileSessionHandler implements SessionHandlerInterface
+use Ojhaujjwal\Session\Exception;
+
+final class FileHandler implements HandlerInterface
 {
     /**
      * @var string
