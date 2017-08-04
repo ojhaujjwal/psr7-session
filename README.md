@@ -1,5 +1,6 @@
 PSR-7 Session
 ===================
+[![Build Status][travis-image]][travis-url]
 
 Alternative to PHP's native session handler. It does not depend on PHP's session capability.
 
@@ -191,3 +192,10 @@ The middleware is compatible with `http-interop/http-middleware` based single pa
 - [ ] Cookie Based session handler
 - [ ] Encryption Session Handler
  
+ 
+## License
+
+[MIT](LICENSE)
+
+[travis-image]: https://travis-ci.org/ojhaujjwal/psr7-session.svg?branch=master
+[travis-url]: https://travis-ci.org/ojhaujjwal/psr7-session
