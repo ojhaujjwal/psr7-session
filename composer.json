@@ -30,7 +30,8 @@
     "http-interop/http-middleware": "^0.4.1",
     "zendframework/zend-stratigility": "^2.0",
     "phpunit/phpunit": "^6.2",
-    "mockery/mockery": "^0.9.9"
+    "mockery/mockery": "^0.9.9",
+    "mikey179/vfsStream": "^1.6"
   },
   "suggest": {
     "http-interop/http-middleware": "To use interop based single pass session middleware for automatically starting session and writing to cookie",

@@ -149,9 +149,7 @@ final class SessionManager implements SessionManagerInterface
      */
     private function save(): void
     {
-        $this->handler->write($this->getId(), $this->prepareForStorage(
-            $this->sessionEncode($this->storage->toArray())
-        ));
+        $this->handler->write($this->getId(), $this->sessionEncode($this->storage->toArray()));
         $this->started = false;
     }
 
@@ -164,35 +162,12 @@ final class SessionManager implements SessionManagerInterface
     private function readFromHandler(): array
     {
         if ($data = $this->handler->read($this->getId())) {
-            $data = $this->sessionDecode($this->prepareForUnserialize($data));
+            $data = $this->sessionDecode($data);
             if (false !== $data && null !== $data && is_array($data)) {
                 return $data;
             }
         }
         return [];
-    }
-
-    /**
-     * Prepare the raw string data from the session for unserialization.
-     *
-     * @param  string  $data
-     * @return string
-     */
-    private function prepareForUnserialize(string $data): string
-    {
-        return $data;
-    }
-
-
-    /**
-     * Prepare the serialized session data for storage.
-     *
-     * @param  string  $data
-     * @return string
-     */
-    private function prepareForStorage(string $data): string
-    {
-        return $data;
     }
 
     /**
