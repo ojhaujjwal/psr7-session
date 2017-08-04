@@ -61,23 +61,18 @@ final class SessionMiddleware implements MiddlewareInterface
     }
 
     /**
-     * Handle a request
+     * Proxy to process()
      *
-     *
-     * $delegate may be either a DelegateInterface instance, or a callable
-     * accepting at least a request instance (in such cases, the delegate
-     * will be decorated using Delegate\CallableDelegateDecorator).
+     * Proxies to process, after first wrapping the `$next` argument using the
+     * CallableDelegateDecorator.
      *
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param callable|DelegateInterface $delegate
+     * @param callable $next
      * @return ResponseInterface
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $delegate)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
-        if (! $delegate instanceof DelegateInterface && is_callable($delegate)) {
-            $delegate = new CallableDelegateDecorator($delegate, $response);
-        }
-        return $this->process($request, $delegate);
+        return $this->process($request, new CallableDelegateDecorator($next, $response));
     }
 }
