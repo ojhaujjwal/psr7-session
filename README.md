@@ -186,7 +186,7 @@ The middleware is compatible with `http-interop/http-middleware` based single pa
 ```
  
 ### TODO 
-- [ ] Unit tests
+- [ ] Fix build in php7.2
 - [ ] Garbage collection
 - [ ] Cookie Based session handler
 - [ ] Encryption Session Handler
