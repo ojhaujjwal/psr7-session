@@ -145,7 +145,7 @@ $storage->abcd = 'efgh';
 //or
 $storage['abcd'] = 'efgh';
 //or
-$storage->set('abcd', 'efgh';
+$storage->set('abcd', 'efgh');
 ```
 
 #### Read from session 
