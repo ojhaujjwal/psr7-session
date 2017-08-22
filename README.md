@@ -7,13 +7,13 @@ PSR-7 Session
 [![Latest Unstable Version](https://poser.pugx.org/ujjwal/psr7-http-session/v/unstable)](https://packagist.org/packages/ujjwal/psr7-http-session)
 [![License](https://poser.pugx.org/ujjwal/psr7-http-session/license)](https://packagist.org/packages/ujjwal/psr7-http-session)
 
-Alternative to PHP's native session handler. It does not depend on PHP's session capability.
+Alternative to PHP's native session handler. It does not depend on PHP's session capability. It can be used with non-typical php based applications like with [react/http](https://github.com/reactphp/http).
 
 ### But, why?
 ![But, why?](http://vignette2.wikia.nocookie.net/vampirediaries/images/c/ca/But-why-meme-generator-but-why-84103d.jpg/revision/latest?cb=20130811194815])
 - You don't have to depend on `session_` functions which means you can write testable code.
 - You don't have to depend on `$_SESSION` superglobal allowing you to write more testable code. 
-- You can even use this for non-typical php based applications like with [react/http](https://github.com/reactphp/http)
+- You can even use this for non-typical php based applications like with [react/http](https://github.com/reactphp/http).
 - You can create a framework agnostic library/module depending on [psr-7](http://www.php-fig.org/psr/psr-7/) HTTP message interfaces and this session library.
 
 ## Getting started
