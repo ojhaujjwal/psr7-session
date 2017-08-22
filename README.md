@@ -9,33 +9,40 @@ PSR-7 Session
 
 Alternative to PHP's native session handler. It does not depend on PHP's session capability.
 
+### But, why?
+![But, why?](http://vignette2.wikia.nocookie.net/vampirediaries/images/c/ca/But-why-meme-generator-but-why-84103d.jpg/revision/latest?cb=20130811194815])
+- You don't have to depend on `session_` functions which means you can write testable code.
+- You don't have to depend on `$_SESSION` superglobal allowing you to write more testable code. 
+- You can even use this for non-typical php based applications like with [react/http](https://github.com/reactphp/http)
+- You can create a framework agnostic library/module depending on [psr-7](http://www.php-fig.org/psr/psr-7/) HTTP message interfaces and this session library.
+
 ## Getting started
 
 ```php
-    $sessionOptions = [
-        'name' => 'session_id',
-        'sid_length' => 40,
-        'cookie' => [
-            'domain' => 'your-app.com',
-        ]
-    ];
+$sessionOptions = [
+    'name' => 'session_id',
+    'sid_length' => 40,
+    'cookie' => [
+        'domain' => 'your-app.com',
+    ]
+];
 
-    $sessionHandler = new Ojhaujjwal\Session\Handler\FileHandler('path/to/session-data');
-    $sessionManager = new Ojhaujjwal\Session\SessionManager(
-        $sessionHandler,
-        $request,
-        $sessionOptions
-    );
-    $storage = $sessionManager->getStorage();
-    
-    $sessionManager->start();
-       
-    // you can manipulate $storage just like $_SESSION   
-    $storage['some_key'] = 'some_value';
-    $someKey = $storage['some_key'];
-    
-    $response = $sessionManager->close($response);
-    //return the response the the client
+$sessionHandler = new Ojhaujjwal\Session\Handler\FileHandler('path/to/session-data');
+$sessionManager = new Ojhaujjwal\Session\SessionManager(
+    $sessionHandler,
+    $request,
+    $sessionOptions
+);
+$storage = $sessionManager->getStorage();
+
+$sessionManager->start();
+
+// you can manipulate $storage just like $_SESSION   
+$storage['some_key'] = 'some_value';
+$someKey = $storage['some_key'];
+
+$response = $sessionManager->close($response);
+//return the response the the client
 ```
 
 ### Installation
